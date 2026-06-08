@@ -16,15 +16,17 @@ export class ScheduleComponent implements OnInit {
   loading = true;
 
   ngOnInit(): void {
-    this.http.get<any[]>('http://localhost:5000/schedule/available').subscribe({
-      next: (data) => {
-        this.slots = data;
-        this.loading = false;
-      },
-      error: (err) => {
-        console.error('Ошибка загрузки расписания', err);
-        this.loading = false;
-      }
-    });
+    this.http
+      .get<any[]>('https://standart-server.onrender.com/schedule/available')
+      .subscribe({
+        next: (data) => {
+          this.slots = data;
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('Ошибка загрузки расписания', err);
+          this.loading = false;
+        },
+      });
   }
 }

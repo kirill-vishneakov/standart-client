@@ -24,7 +24,7 @@ import { generateEmployeeReportPDF } from '../../utils/pdf-report.util';
     MatNativeDateModule,
   ],
   templateUrl: './report-employee.component.html',
-  styleUrls: ['./report-employee.component.scss']
+  styleUrls: ['./report-employee.component.scss'],
 })
 export class ReportEmployeeComponent implements OnInit {
   private http = inject(HttpClient);
@@ -38,10 +38,12 @@ export class ReportEmployeeComponent implements OnInit {
   reportPeriodLabel: string = '';
 
   ngOnInit(): void {
-    this.http.get<any[]>('http://localhost:5000/users/employees').subscribe({
-      next: data => this.employees = data,
-      error: err => console.error('Ошибка загрузки сотрудников', err)
-    });
+    this.http
+      .get<any[]>('https://standart-server.onrender.com/users/employees')
+      .subscribe({
+        next: (data) => (this.employees = data),
+        error: (err) => console.error('Ошибка загрузки сотрудников', err),
+      });
   }
 
   loadReport(): void {
@@ -81,7 +83,10 @@ export class ReportEmployeeComponent implements OnInit {
     const endStr = endDate.toISOString().slice(0, 10);
 
     this.loading = true;
-    this.http.get<any>(`http://localhost:5000/reports/employee/${this.selectedEmployeeId}?start=${startStr}&end=${endStr}`)
+    this.http
+      .get<any>(
+        `https://standart-server.onrender.com/reports/employee/${this.selectedEmployeeId}?start=${startStr}&end=${endStr}`,
+      )
       .subscribe({
         next: (data) => {
           this.report = data;
@@ -90,7 +95,7 @@ export class ReportEmployeeComponent implements OnInit {
         error: (err) => {
           console.error('Ошибка загрузки отчёта', err);
           this.loading = false;
-        }
+        },
       });
   }
 

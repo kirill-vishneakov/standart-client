@@ -18,10 +18,10 @@ import { MatButtonModule } from '@angular/material/button';
     MatSelectModule,
     MatInputModule,
     MatCheckboxModule,
-    MatButtonModule
+    MatButtonModule,
   ],
   templateUrl: './schedule-create.component.html',
-  styleUrls: ['./schedule-create.component.scss']
+  styleUrls: ['./schedule-create.component.scss'],
 })
 export class ScheduleCreateComponent implements OnInit {
   http = inject(HttpClient);
@@ -43,27 +43,33 @@ export class ScheduleCreateComponent implements OnInit {
   generateForWeek: boolean = true;
 
   ngOnInit(): void {
-    this.http.get<any[]>('http://localhost:5000/users/employees').subscribe(data => {
-      this.employees = data;
-    });
+    this.http
+      .get<any[]>('https://standart-server.onrender.com/users/employees')
+      .subscribe((data) => {
+        this.employees = data;
+      });
   }
 
   generate() {
-    const selectedDays = this.weekdays.filter(d => d.selected).map(d => d.value);
+    const selectedDays = this.weekdays
+      .filter((d) => d.selected)
+      .map((d) => d.value);
     if (!this.selectedEmployeeId || selectedDays.length === 0) {
       alert('Выберите сотрудника и хотя бы один день недели');
       return;
     }
 
-    this.http.post('http://localhost:5000/schedule/generate', {
-      employee_id: this.selectedEmployeeId,
-      daysOfWeek: selectedDays,
-      startTime: this.startTime,
-      endTime: this.endTime,
-      generateForWeek: this.generateForWeek
-    }).subscribe({
-      next: () => alert('Расписание создано'),
-      error: err => console.error('Ошибка генерации расписания', err)
-    });
+    this.http
+      .post('https://standart-server.onrender.com/schedule/generate', {
+        employee_id: this.selectedEmployeeId,
+        daysOfWeek: selectedDays,
+        startTime: this.startTime,
+        endTime: this.endTime,
+        generateForWeek: this.generateForWeek,
+      })
+      .subscribe({
+        next: () => alert('Расписание создано'),
+        error: (err) => console.error('Ошибка генерации расписания', err),
+      });
   }
 }

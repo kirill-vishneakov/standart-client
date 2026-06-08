@@ -21,7 +21,6 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
-
   ],
   templateUrl: './appointments-admin.component.html',
   styleUrls: ['./appointments-admin.component.scss'],
@@ -36,7 +35,7 @@ export class AppointmentsAdminComponent implements OnInit {
   statusMap: Record<string, string> = {
     scheduled: 'Запланирована',
     completed: 'Завершена',
-    canceled: 'Отменена'
+    canceled: 'Отменена',
   };
 
   selectedEmployee: string = 'all';
@@ -45,45 +44,53 @@ export class AppointmentsAdminComponent implements OnInit {
   get uniqueEmployees(): any[] {
     const seen = new Set();
     return this.appointments
-      .map(a => a.employee)
-      .filter(e => e && !seen.has(e.id) && seen.add(e.id));
+      .map((a) => a.employee)
+      .filter((e) => e && !seen.has(e.id) && seen.add(e.id));
   }
 
-
   ngOnInit(): void {
-    this.http.get<any[]>('http://localhost:5000/appointments').subscribe({
-      next: data => {
-        this.appointments = data;
-        this.loading = false;
-      },
-      error: err => {
-        console.error('Ошибка загрузки записей', err);
-        this.loading = false;
-      }
-    });
+    this.http
+      .get<any[]>('https://standart-server.onrender.com/appointments')
+      .subscribe({
+        next: (data) => {
+          this.appointments = data;
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('Ошибка загрузки записей', err);
+          this.loading = false;
+        },
+      });
   }
 
   get filteredAppointments(): any[] {
-
-    return this.appointments.filter(a => {
-      const statusMatch = this.selectedStatus === 'all' || a.status === this.selectedStatus;
-      const employeeMatch = this.selectedEmployee === 'all' || a.employee?.id === +this.selectedEmployee;
-      const dateMatch = !this.selectedDate || a.date_time.startsWith(this.selectedDate.toISOString().slice(0, 10));
+    return this.appointments.filter((a) => {
+      const statusMatch =
+        this.selectedStatus === 'all' || a.status === this.selectedStatus;
+      const employeeMatch =
+        this.selectedEmployee === 'all' ||
+        a.employee?.id === +this.selectedEmployee;
+      const dateMatch =
+        !this.selectedDate ||
+        a.date_time.startsWith(this.selectedDate.toISOString().slice(0, 10));
       return statusMatch && employeeMatch && dateMatch;
     });
   }
 
-
   updateAppointmentStatus(id: number, status: string): void {
-    if (!confirm(`Изменить статус на: ${this.statusMap[status] || status}?`)) return;
+    if (!confirm(`Изменить статус на: ${this.statusMap[status] || status}?`))
+      return;
 
-    this.http.patch(`http://localhost:5000/appointments/${id}/status`, { status }).subscribe({
-      next: () => {
-        const appt = this.appointments.find(a => a.id === id);
-        if (appt) appt.status = status;
-      },
-      error: err => console.error('Ошибка изменения статуса', err)
-    });
+    this.http
+      .patch(`https://standart-server.onrender.com/appointments/${id}/status`, {
+        status,
+      })
+      .subscribe({
+        next: () => {
+          const appt = this.appointments.find((a) => a.id === id);
+          if (appt) appt.status = status;
+        },
+        error: (err) => console.error('Ошибка изменения статуса', err),
+      });
   }
-
 }

@@ -10,7 +10,7 @@ import { AuthService } from '../../core/services/auth.service';
   standalone: true,
   imports: [CommonModule, MatCardModule],
   templateUrl: './schedule-my.component.html',
-  styleUrl: './schedule-my.component.scss'
+  styleUrl: './schedule-my.component.scss',
 })
 export class ScheduleMyComponent implements OnInit {
   private http = inject(HttpClient);
@@ -25,13 +25,15 @@ export class ScheduleMyComponent implements OnInit {
   }
 
   loadSchedule(): void {
-    this.http.get<any[]>('http://localhost:5000/schedule/my').subscribe({
-      next: (data) => {
-        this.slots = data;
-        this.groupSlotsByDate();
-      },
-      error: (err) => console.error('Ошибка загрузки расписания:', err)
-    });
+    this.http
+      .get<any[]>('https://standart-server.onrender.com/schedule/my')
+      .subscribe({
+        next: (data) => {
+          this.slots = data;
+          this.groupSlotsByDate();
+        },
+        error: (err) => console.error('Ошибка загрузки расписания:', err),
+      });
   }
 
   groupSlotsByDate(): void {

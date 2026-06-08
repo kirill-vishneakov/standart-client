@@ -17,10 +17,10 @@ import { MatSelectModule } from '@angular/material/select';
     MatCardModule,
     MatButtonModule,
     MatFormFieldModule,
-    MatSelectModule
+    MatSelectModule,
   ],
   templateUrl: './appointments-mine.component.html',
-  styleUrls: ['./appointments-mine.component.scss']
+  styleUrls: ['./appointments-mine.component.scss'],
 })
 export class AppointmentsMineComponent implements OnInit {
   http = inject(HttpClient);
@@ -35,7 +35,7 @@ export class AppointmentsMineComponent implements OnInit {
   statusMap: Record<string, string> = {
     scheduled: 'Запланирована',
     completed: 'Завершена',
-    canceled: 'Отменена'
+    canceled: 'Отменена',
   };
 
   reschedulingId: number | null = null;
@@ -44,32 +44,40 @@ export class AppointmentsMineComponent implements OnInit {
 
   get filteredAppointments() {
     if (this.selectedStatus === 'all') return this.appointments;
-    return this.appointments.filter(a => a.status === this.selectedStatus);
+    return this.appointments.filter((a) => a.status === this.selectedStatus);
   }
 
-
   ngOnInit(): void {
-    this.http.get<any[]>('http://localhost:5000/appointments/mine').subscribe({
-      next: (data) => {
-        this.appointments = data;
-        this.loading = false;
-      },
-      error: (err) => {
-        console.error('Ошибка загрузки записей', err);
-        this.loading = false;
-      }
-    });
+    this.http
+      .get<any[]>('https://standart-server.onrender.com/appointments/mine')
+      .subscribe({
+        next: (data) => {
+          this.appointments = data;
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('Ошибка загрузки записей', err);
+          this.loading = false;
+        },
+      });
   }
 
   cancel(id: number): void {
     if (!confirm('Отменить запись?')) return;
 
-    this.http.patch(`http://localhost:5000/appointments/${id}/cancel`, {}).subscribe({
-      next: () => {
-        this.appointments = this.appointments.map(a => a.id === id ? { ...a, status: 'canceled' } : a);
-      },
-      error: err => console.error('Ошибка отмены', err)
-    });
+    this.http
+      .patch(
+        `https://standart-server.onrender.com/appointments/${id}/cancel`,
+        {},
+      )
+      .subscribe({
+        next: () => {
+          this.appointments = this.appointments.map((a) =>
+            a.id === id ? { ...a, status: 'canceled' } : a,
+          );
+        },
+        error: (err) => console.error('Ошибка отмены', err),
+      });
   }
 
   isClient(): boolean {
@@ -77,32 +85,38 @@ export class AppointmentsMineComponent implements OnInit {
   }
 
   loadAvailableSlots(): void {
-    this.http.get<any[]>('http://localhost:5000/schedule/available').subscribe({
-      next: data => this.slots = data,
-      error: err => console.error('Ошибка загрузки слотов', err)
-    });
+    this.http
+      .get<any[]>('https://standart-server.onrender.com/schedule/available')
+      .subscribe({
+        next: (data) => (this.slots = data),
+        error: (err) => console.error('Ошибка загрузки слотов', err),
+      });
   }
 
   reschedule(appointmentId: number): void {
     if (!this.selectedSlotId) return;
 
-    this.http.patch(`http://localhost:5000/appointments/${appointmentId}/reschedule`, {
-      new_slot_id: this.selectedSlotId
-    }).subscribe({
-      next: () => {
-        // Обновляем локальный статус
-        const appt = this.appointments.find(a => a.id === appointmentId);
-        const newSlot = this.slots.find(s => s.id === this.selectedSlotId);
-        if (appt && newSlot) {
-          appt.date_time = newSlot.start_time;
-          appt.employee = newSlot.employee;
-        }
+    this.http
+      .patch(
+        `https://standart-server.onrender.com/appointments/${appointmentId}/reschedule`,
+        {
+          new_slot_id: this.selectedSlotId,
+        },
+      )
+      .subscribe({
+        next: () => {
+          // Обновляем локальный статус
+          const appt = this.appointments.find((a) => a.id === appointmentId);
+          const newSlot = this.slots.find((s) => s.id === this.selectedSlotId);
+          if (appt && newSlot) {
+            appt.date_time = newSlot.start_time;
+            appt.employee = newSlot.employee;
+          }
 
-        this.reschedulingId = null;
-        this.selectedSlotId = null;
-      },
-      error: err => console.error('Ошибка переноса записи:', err)
-    });
+          this.reschedulingId = null;
+          this.selectedSlotId = null;
+        },
+        error: (err) => console.error('Ошибка переноса записи:', err),
+      });
   }
-
 }

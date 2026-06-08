@@ -41,24 +41,30 @@ export class AppointmentCreateComponent implements OnInit {
 
   ngOnInit(): void {
     // Загружаем список услуг
-    this.http.get('http://localhost:5000/services').subscribe((data: any) => this.services = data);
+    this.http
+      .get('https://standart-server.onrender.com/services')
+      .subscribe((data: any) => (this.services = data));
   }
 
   // Когда выбирается услуга, загружаем доступных работников
   onServiceChange(event: any): void {
     const serviceId = event.value;
-    this.http.get<any[]>(`http://localhost:5000/schedule/available?service_id=${serviceId}`).subscribe(slots => {
-      // Убираем дублирование работников
-      const employeesSet = new Set();
-      this.availableEmployees = [];
-      this.availableSlots = slots.map((slot: any) => {
-        if (!employeesSet.has(slot.employee.id)) {
-          employeesSet.add(slot.employee.id);
-          this.availableEmployees.push(slot.employee);
-        }
-        return slot;
+    this.http
+      .get<
+        any[]
+      >(`https://standart-server.onrender.com/schedule/available?service_id=${serviceId}`)
+      .subscribe((slots) => {
+        // Убираем дублирование работников
+        const employeesSet = new Set();
+        this.availableEmployees = [];
+        this.availableSlots = slots.map((slot: any) => {
+          if (!employeesSet.has(slot.employee.id)) {
+            employeesSet.add(slot.employee.id);
+            this.availableEmployees.push(slot.employee);
+          }
+          return slot;
+        });
       });
-    });
   }
 
   // Когда выбирается работник, показываем доступные слоты для него
@@ -66,9 +72,13 @@ export class AppointmentCreateComponent implements OnInit {
     const employeeId = this.form.get('employee_id')?.value;
     const serviceId = this.form.get('service_id')?.value;
 
-    this.http.get<any[]>(`http://localhost:5000/schedule/available?employee_id=${employeeId}&service_id=${serviceId}`).subscribe(slots => {
-      this.availableSlots = slots;
-    });
+    this.http
+      .get<
+        any[]
+      >(`https://standart-server.onrender.com/schedule/available?employee_id=${employeeId}&service_id=${serviceId}`)
+      .subscribe((slots) => {
+        this.availableSlots = slots;
+      });
   }
 
   // Отправка формы
@@ -78,14 +88,16 @@ export class AppointmentCreateComponent implements OnInit {
     const { service_id, slot_id, employee_id } = this.form.value;
     const client_id = this.auth.currentUser.id;
 
-    this.http.post('http://localhost:5000/appointments', {
-      client_id,
-      service_id,
-      slot_id,
-      employee_id
-    }).subscribe({
-      next: () => this.router.navigate(['/appointments/mine']),
-      error: err => console.error('Ошибка записи', err)
-    });
+    this.http
+      .post('https://standart-server.onrender.com/appointments', {
+        client_id,
+        service_id,
+        slot_id,
+        employee_id,
+      })
+      .subscribe({
+        next: () => this.router.navigate(['/appointments/mine']),
+        error: (err) => console.error('Ошибка записи', err),
+      });
   }
 }

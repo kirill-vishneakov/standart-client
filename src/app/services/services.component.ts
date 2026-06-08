@@ -14,16 +14,18 @@ interface Service {
   selector: 'app-services',
   standalone: true,
   imports: [CommonModule, MatCardModule],
-  templateUrl: 'services.component.html'
+  templateUrl: 'services.component.html',
 })
 export class ServicesComponent implements OnInit {
   http = inject(HttpClient);
   services: Service[] = [];
 
   ngOnInit(): void {
-    this.http.get<Service[]>('http://localhost:5000/services').subscribe({
-      next: (data) => this.services = data,
-      error: (err) => console.error('Ошибка загрузки услуг', err)
-    });
+    this.http
+      .get<Service[]>('https://standart-server.onrender.com/services')
+      .subscribe({
+        next: (data) => (this.services = data),
+        error: (err) => console.error('Ошибка загрузки услуг', err),
+      });
   }
 }

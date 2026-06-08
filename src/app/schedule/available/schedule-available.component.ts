@@ -12,7 +12,8 @@ import { MatInputModule } from '@angular/material/input';
 @Component({
   selector: 'app-schedule-available',
   standalone: true,
-  imports: [MatSelectModule,
+  imports: [
+    MatSelectModule,
     MatButtonModule,
     MatFormFieldModule,
     FormsModule,
@@ -21,9 +22,10 @@ import { MatInputModule } from '@angular/material/input';
     MatButtonModule,
     DatePipe,
     CommonModule,
-    MatInputModule],
-  templateUrl: "schedule-available.component.html",
-  styleUrl: "schedule-available.component.scss"
+    MatInputModule,
+  ],
+  templateUrl: 'schedule-available.component.html',
+  styleUrl: 'schedule-available.component.scss',
 })
 export class ScheduleAvailableComponent implements OnInit {
   private http = inject(HttpClient);
@@ -40,9 +42,11 @@ export class ScheduleAvailableComponent implements OnInit {
   ngOnInit() {}
 
   loadEmployees() {
-    this.http.get<any[]>('http://localhost:5000/users/employees').subscribe((data) => {
-      this.employees = data;
-    });
+    this.http
+      .get<any[]>('https://standart-server.onrender.com/users/employees')
+      .subscribe((data) => {
+        this.employees = data;
+      });
   }
 
   loadAvailableSlots() {
@@ -54,7 +58,9 @@ export class ScheduleAvailableComponent implements OnInit {
     const date = this.selectedDate.toISOString().slice(0, 10);
 
     this.http
-      .get<any[]>(`http://localhost:5000/schedule/available?employee_id=${this.selectedEmployeeId}&date=${date}`)
+      .get<
+        any[]
+      >(`https://standart-server.onrender.com/schedule/available?employee_id=${this.selectedEmployeeId}&date=${date}`)
       .subscribe({
         next: (data) => {
           this.slots = data;

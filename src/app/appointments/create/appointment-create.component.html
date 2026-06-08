@@ -1,11 +1,13 @@
 <div class="container">
   <h2>Запись на приём</h2>
   <form [formGroup]="form" (ngSubmit)="submit()">
-
     <!-- Выбор услуги -->
     <mat-form-field class="w-100">
       <mat-label>Услуга</mat-label>
-      <mat-select formControlName="service_id" (selectionChange)="onServiceChange($event)">
+      <mat-select
+        formControlName="service_id"
+        (selectionChange)="onServiceChange($event)"
+      >
         <mat-option *ngFor="let s of services" [value]="s.id">
           {{ s.name }} — {{ s.price }}₽ ({{ s.duration_minutes }} мин)
         </mat-option>
@@ -15,8 +17,14 @@
     <!-- Выбор работника (появляется после выбора услуги) -->
     <mat-form-field class="w-100" *ngIf="availableEmployees.length > 0">
       <mat-label>Выберите работника</mat-label>
-      <mat-select formControlName="employee_id" (selectionChange)="onEmployeeChange()">
-        <mat-option *ngFor="let employee of availableEmployees" [value]="employee.id">
+      <mat-select
+        formControlName="employee_id"
+        (selectionChange)="onEmployeeChange()"
+      >
+        <mat-option
+          *ngFor="let employee of availableEmployees"
+          [value]="employee.id"
+        >
           {{ employee.full_name }}
         </mat-option>
       </mat-select>
@@ -27,12 +35,20 @@
       <mat-label>Время</mat-label>
       <mat-select formControlName="slot_id">
         <mat-option *ngFor="let slot of availableSlots" [value]="slot.id">
-          {{ slot.start_time | date:'dd.MM.yyyy HH:mm' }} — {{ slot.employee.full_name }}
+          {{ slot.start_time | date: "dd.MM.yyyy HH:mm" }} —
+          {{ slot.employee.full_name }}
         </mat-option>
       </mat-select>
     </mat-form-field>
 
     <!-- Кнопка записи -->
-    <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Записаться</button>
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="form.invalid"
+    >
+      Записаться
+    </button>
   </form>
 </div>

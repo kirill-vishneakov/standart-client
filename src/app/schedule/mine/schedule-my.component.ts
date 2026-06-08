@@ -16,6 +16,16 @@ export class ScheduleMyComponent implements OnInit {
   private http = inject(HttpClient);
   private auth = inject(AuthService);
 
+  daysRu = [
+    'Понедельник',
+    'Вторник',
+    'Среда',
+    'Четверг',
+    'Пятница',
+    'Суббота',
+    'Воскресенье',
+  ];
+
   slots: any[] = [];
   grouped: Record<string, any[]> = {};
   weekDays: Date[] = [];

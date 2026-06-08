@@ -4,16 +4,23 @@
   <div class="week-grid" *ngIf="weekDays.length > 0; else noData">
     <div class="week-header">
       <div class="day" *ngFor="let day of weekDays">
-        {{ day | date: 'EEEE, dd MMM' }}
+        {{ daysRu[day.getDay() === 0 ? 6 : day.getDay() - 1] }},
+        {{ day | date: "dd MMM" }}
       </div>
     </div>
 
     <div class="week-body">
       <div class="day" *ngFor="let day of weekDays">
-        <div *ngFor="let slot of getSlotsByDay(day)" class="slot" [class.booked]="!slot.is_available">
-          {{ slot.start_time | date:'HH:mm' }} - {{ slot.end_time | date:'HH:mm' }}
+        <div
+          *ngFor="let slot of getSlotsByDay(day)"
+          class="slot"
+          [class.booked]="!slot.is_available"
+        >
+          {{ slot.start_time | date: "HH:mm" }} -
+          {{ slot.end_time | date: "HH:mm" }}
           <div *ngIf="slot.appointment" class="appointment">
-            <strong>Запись:</strong> {{ slot.appointment.client?.full_name || 'Неизвестно' }}
+            <strong>Запись:</strong>
+            {{ slot.appointment.client?.full_name || "Неизвестно" }}
           </div>
         </div>
       </div>

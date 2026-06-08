@@ -1,0 +1,29 @@
+<div class="container">
+  <h2>Генерация расписания</h2>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Сотрудник</mat-label>
+    <mat-select [(ngModel)]="selectedEmployeeId">
+      <mat-option *ngFor="let e of employees" [value]="e.id">{{ e.full_name }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-label>Дни недели:</mat-label>
+  <div class="days">
+    <mat-checkbox *ngFor="let d of weekdays" [(ngModel)]="d.selected">{{ d.name }}</mat-checkbox>
+  </div>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Начало</mat-label>
+    <input matInput type="time" [(ngModel)]="startTime">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Конец</mat-label>
+    <input matInput type="time" [(ngModel)]="endTime">
+  </mat-form-field>
+
+  <mat-checkbox [(ngModel)]="generateForWeek">Сгенерировать на всю неделю</mat-checkbox>
+
+  <button mat-raised-button color="primary" (click)="generate()">Создать</button>
+</div>

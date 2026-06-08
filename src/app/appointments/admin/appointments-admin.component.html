@@ -1,0 +1,49 @@
+<div class="container">
+  <h2>Все записи</h2>
+
+  <mat-form-field appearance="outline" class="w-100">
+  <mat-label>Сотрудник</mat-label>
+  <mat-select [(ngModel)]="selectedEmployee">
+    <mat-option value="all">Все</mat-option>
+    <mat-option *ngFor="let e of uniqueEmployees" [value]="e.id">
+      {{ e.full_name }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Дата</mat-label>
+    <input matInput [matDatepicker]="adminPicker" [(ngModel)]="selectedDate" placeholder="Выберите дату">
+    <mat-datepicker-toggle matSuffix [for]="adminPicker"></mat-datepicker-toggle>
+    <mat-datepicker #adminPicker></mat-datepicker>
+  </mat-form-field>
+
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Фильтр по статусу</mat-label>
+    <mat-select [(ngModel)]="selectedStatus">
+      <mat-option *ngFor="let status of statuses" [value]="status">
+        {{ status === 'all' ? 'Все' : statusMap[status] || status }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div *ngIf="loading">Загрузка...</div>
+
+  <mat-card *ngFor="let a of filteredAppointments" class="card">
+    <h3>{{ a.service.name }}</h3>
+    <p>Дата: {{ a.date_time | date:'dd.MM.yyyy HH:mm' }}</p>
+    <p>Клиент: {{ a.client?.full_name }}</p>
+    <p>Сотрудник: {{ a.employee?.full_name }}</p>
+    <p>Статус: <strong>{{ statusMap[a.status] || a.status }}</strong></p>
+
+    <button mat-button color="primary" *ngIf="a.status === 'scheduled'" (click)="updateAppointmentStatus(a.id, 'completed')">
+      Завершить
+    </button>
+
+    <button mat-button color="warn" *ngIf="a.status === 'scheduled'" (click)="updateAppointmentStatus(a.id, 'canceled')">
+      Отменить
+    </button>
+  </mat-card>
+</div>

@@ -1,0 +1,48 @@
+<div class="container">
+  <h2>Отчёт по сотруднику</h2>
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Сотрудник</mat-label>
+    <mat-select [(ngModel)]="selectedEmployeeId">
+      <mat-option *ngFor="let e of employees" [value]="e.id">
+        {{ e.full_name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Выберите период</mat-label>
+    <mat-select [(ngModel)]="selectedPeriod">
+      <mat-option value="month">Месяц</mat-option>
+      <mat-option value="quarter">Квартал</mat-option>
+      <mat-option value="year">Год</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Дата</mat-label>
+    <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate" placeholder="Выберите дату" />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <button mat-raised-button color="accent" (click)="loadReport()">Показать отчёт</button>
+
+
+  <div *ngIf="report && !loading" class="report">
+    <h3>{{ report.employee?.full_name || 'Данные не загружены' }}</h3>
+    <p>Количество приёмов: {{ report.totalAppointments }}</p>
+    <p>Общий доход: {{ report.totalIncome }} ₽</p>
+
+    <h4>Услуги:</h4>
+    <ul>
+      <li *ngFor="let s of report.services">
+        {{ s.name }} — {{ s.count }} приёмов, {{ s.income }} ₽
+      </li>
+    </ul>
+    <button mat-raised-button color="accent" (click)="downloadPDF()" *ngIf="report">Скачать PDF</button>
+  </div>
+
+
+
+</div>

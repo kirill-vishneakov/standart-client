@@ -1,0 +1,10 @@
+<div class="container">
+  <h2>Свободные слоты</h2>
+
+  <div *ngIf="loading">Загрузка...</div>
+
+  <mat-card *ngFor="let slot of slots" class="card">
+    <p><strong>Дата:</strong> {{ slot.start_time | date: 'dd.MM.yyyy HH:mm' }}</p>
+    <p><strong>Сотрудник:</strong> {{ slot.employee.full_name }}</p>
+  </mat-card>
+</div>

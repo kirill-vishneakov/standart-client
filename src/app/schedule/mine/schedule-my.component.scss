@@ -1,0 +1,57 @@
+.schedule-container {
+  padding: 20px;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .week-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .week-header {
+      display: flex;
+      background: #f5f5f5;
+      font-weight: bold;
+
+      .day {
+        flex: 1;
+        text-align: center;
+        padding: 10px;
+        border-bottom: 2px solid #ccc;
+      }
+    }
+
+    .week-body {
+      display: flex;
+
+      .day {
+        flex: 1;
+        padding: 10px;
+        border-right: 1px solid #e0e0e0;
+
+        .slot {
+          background: #e8f5e9;
+          padding: 6px;
+          margin-bottom: 6px;
+          border-radius: 5px;
+          font-size: 14px;
+          line-height: 1.4;
+
+          &.booked {
+            background: #ffebee;
+            color: #b71c1c;
+          }
+
+          .appointment {
+            margin-top: 4px;
+            font-size: 13px;
+            color: #333;
+          }
+        }
+      }
+    }
+  }
+}

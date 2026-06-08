@@ -1,0 +1,22 @@
+<div class="auth-container">
+  <h2>Вход</h2>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Пароль</mat-label>
+      <input matInput formControlName="password" type="password" />
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit">Войти</button>
+
+    <p class="link">
+      Нет аккаунта? <a routerLink="/register">Зарегистрироваться</a>
+    </p>
+
+    <div class="error" *ngIf="error">{{ error }}</div>
+  </form>
+</div>

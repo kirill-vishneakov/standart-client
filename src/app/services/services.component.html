@@ -1,0 +1,8 @@
+<div style="max-width: 800px; margin: auto;">
+  <h2>Список услуг</h2>
+  <mat-card *ngFor="let service of services" style="margin-bottom: 1rem;">
+    <h3>{{ service.name }}</h3>
+    <p>Длительность: {{ service.duration_minutes }} мин</p>
+    <p>Цена: {{ service.price }} ₽</p>
+  </mat-card>
+</div>

@@ -1,0 +1,22 @@
+.layout-container {
+  height: calc(100vh - 64px);
+}
+
+.username{
+  text-decoration: none;
+  color: blue;
+}
+
+.content {
+  padding: 1rem;
+}
+
+.logo{
+  flex: 1 1 auto;
+  text-align: center;
+  font-size: 30px;
+  color: red;
+  font-weight: bold;
+}
+
+

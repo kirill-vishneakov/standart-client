@@ -1,0 +1,26 @@
+<div class="schedule-container">
+  <h2>Моё расписание</h2>
+
+  <div class="week-grid" *ngIf="weekDays.length > 0; else noData">
+    <div class="week-header">
+      <div class="day" *ngFor="let day of weekDays">
+        {{ day | date: 'EEEE, dd MMM' }}
+      </div>
+    </div>
+
+    <div class="week-body">
+      <div class="day" *ngFor="let day of weekDays">
+        <div *ngFor="let slot of getSlotsByDay(day)" class="slot" [class.booked]="!slot.is_available">
+          {{ slot.start_time | date:'HH:mm' }} - {{ slot.end_time | date:'HH:mm' }}
+          <div *ngIf="slot.appointment" class="appointment">
+            <strong>Запись:</strong> {{ slot.appointment.client?.full_name || 'Неизвестно' }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noData>
+    <p>Нет расписания на текущую неделю</p>
+  </ng-template>
+</div>

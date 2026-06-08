@@ -1,0 +1,42 @@
+<mat-toolbar color="primary">
+  <span class="subtitle">Налоговая консультация </span>
+
+  <span class="logo">СТАНДАРТ</span>
+
+  <ng-container>
+    <a class="username" routerLink="/profile">{{
+      auth.currentUser?.full_name
+    }}</a>
+    <button mat-button color="accent" (click)="logout()">Выйти</button>
+  </ng-container>
+</mat-toolbar>
+
+<mat-sidenav-container class="layout-container">
+  <mat-sidenav mode="side" opened>
+    <mat-nav-list>
+      <a mat-list-item routerLink="/services">Услуги</a>
+
+      <ng-container *ngIf="user?.role === 'client'">
+        <a mat-list-item routerLink="/appointments/create">Записаться</a>
+        <a mat-list-item routerLink="/appointments/mine">Мои записи</a>
+      </ng-container>
+
+      <ng-container *ngIf="user?.role === 'admin'">
+        <a mat-list-item routerLink="/appointments/admin">Все записи</a>
+        <a mat-list-item routerLink="/schedule/generate">Создать расписание</a>
+        <a mat-list-item routerLink="/reports/employee"
+          >Отчёты по сотрудникам</a
+        >
+      </ng-container>
+
+      <ng-container *ngIf="user?.role === 'employee'">
+        <a mat-list-item routerLink="/appointments/mine">Мои записи</a>
+        <a mat-list-item routerLink="/schedule/my">Мое расписание</a>
+      </ng-container>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="content">
+    <router-outlet />
+  </mat-sidenav-content>
+</mat-sidenav-container>

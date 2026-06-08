@@ -1,0 +1,23 @@
+<mat-form-field>
+  <mat-label>Выберите сотрудника</mat-label>
+  <mat-select [(ngModel)]="selectedEmployeeId">
+    <mat-option *ngFor="let employee of employees" [value]="employee.id">
+      {{ employee.full_name }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-form-field>
+  <mat-label>Выберите дату</mat-label>
+  <input matInput [(ngModel)]="selectedDate" [matDatepicker]="picker" />
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
+</mat-form-field>
+
+<button mat-raised-button (click)="loadAvailableSlots()">Получить доступные слоты</button>
+
+<ul *ngIf="slots.length > 0">
+  <li *ngFor="let slot of slots">
+    {{ slot.start_time | date:'shortTime' }} - {{ slot.end_time | date:'shortTime' }}
+  </li>
+</ul>

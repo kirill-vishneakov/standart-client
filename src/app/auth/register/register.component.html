@@ -1,0 +1,42 @@
+<div style="max-width: 500px; margin: auto; padding: 2rem;">
+  <h2>Регистрация</h2>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>ФИО</mat-label>
+      <input matInput formControlName="full_name">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Телефон</mat-label>
+      <input matInput formControlName="phone">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Пароль</mat-label>
+      <input matInput type="password" formControlName="password">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Роль</mat-label>
+      <mat-select formControlName="role">
+        <mat-option value="client">Клиент</mat-option>
+        <mat-option value="employee">Сотрудник</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <br>
+
+    <button mat-raised-button color="primary" type="submit">Зарегистрироваться</button>
+
+    <p class="link">
+      Есть аккаунт? <a routerLink="/login">Войти</a>
+    </p>
+
+    <div class="error" *ngIf="error">{{ error }}</div>
+  </form>
+</div>

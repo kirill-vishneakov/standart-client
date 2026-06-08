@@ -1,0 +1,45 @@
+<div class="container">
+  <h2>Мои записи</h2>
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Фильтр по статусу</mat-label>
+    <mat-select [(ngModel)]="selectedStatus">
+      <mat-option *ngFor="let status of statuses" [value]="status">
+        {{ status === 'all' ? 'Все' : statusMap[status] }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div *ngIf="loading">Загрузка...</div>
+
+  <mat-card *ngFor="let a of filteredAppointments" class="card">
+    <h3>{{ a.service.name }}</h3>
+    <p>Дата: {{ a.date_time | date:'dd.MM.yyyy HH:mm' }}</p>
+    <p *ngIf="isClient() && a.employee">Сотрудник: {{ a.employee.full_name }}</p>
+    <p *ngIf="!isClient() && a.client">Клиент: {{ a.client.full_name }}</p>
+    <p>Статус: <strong>{{ statusMap[a.status] }}</strong></p>
+
+    <button *ngIf="a.status === 'scheduled' && isClient()" mat-button color="warn" (click)="cancel(a.id)">
+      Отменить
+    </button>
+    <button *ngIf="a.status === 'scheduled' && isClient()" mat-button color="accent"
+        (click)="reschedulingId = a.id; loadAvailableSlots()">
+  Перенести
+</button>
+
+<div *ngIf="reschedulingId === a.id">
+  <mat-form-field class="w-100">
+    <mat-label>Новый слот</mat-label>
+    <mat-select [(ngModel)]="selectedSlotId">
+      <mat-option *ngFor="let slot of slots" [value]="slot.id">
+        {{ slot.start_time | date: 'dd.MM.yyyy HH:mm' }} — {{ slot.employee.full_name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" (click)="reschedule(a.id)">Подтвердить</button>
+  <button mat-button color="warn" (click)="reschedulingId = null">Отмена</button>
+</div>
+
+  </mat-card>
+</div>

@@ -5,7 +5,7 @@ import { LoginResponse, User } from '../models/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private apiUrl = 'https://standart-server.onrender.com/';
+  private apiUrl = 'https://standart-server.onrender.com';
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
